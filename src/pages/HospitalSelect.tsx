@@ -272,9 +272,6 @@ const HospitalSelect = () => {
               <Button variant="ghost" size="sm" onClick={() => navigate("/track")} className="text-xs text-gray-500 gap-1.5">
                 <Search className="h-3.5 w-3.5" /> Track
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => navigate("/doctor")} className="text-xs text-gray-500 gap-1.5">
-                <Stethoscope className="h-3.5 w-3.5" /> Doctor
-              </Button>
               <Button variant="ghost" size="sm" onClick={() => navigate("/reception")} className="text-xs text-gray-500 gap-1.5">
                 <UserCheck className="h-3.5 w-3.5" /> Reception
               </Button>

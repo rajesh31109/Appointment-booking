@@ -143,12 +143,17 @@ const TrackAppointment = () => {
                         <div>
                           <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mb-1">Contact</p>
                           <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
-                            <Phone className="h-3 w-3" /> {appt.phone}
+                            <Phone className="h-3 w-3" /> {appt.phone ? appt.phone.replace(/(\d{2})\d{5}(\d{3})/, '$1*****$2') : "—"}
                           </p>
                           <p className="text-xs text-gray-500 flex items-center gap-1">
                             <MapPin className="h-3 w-3" /> {appt.place}
                           </p>
                         </div>
+                                            {/* Date/Time */}
+                                            <div>
+                                              <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mb-1">Booked At</p>
+                                              <p className="text-xs text-gray-500">{appt.createdAt ? new Date(appt.createdAt).toLocaleString() : "—"}</p>
+                                            </div>
                       </div>
 
                       {/* Hospital & Doctor */}

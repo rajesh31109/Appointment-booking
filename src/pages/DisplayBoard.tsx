@@ -172,6 +172,7 @@ const DisplayBoard = () => {
                         <div>
                           <p className="font-semibold text-gray-900 dark:text-white">{dq.current.name}</p>
                           <p className="text-xs text-blue-600 font-mono font-semibold">{dq.current.tokenId}</p>
+                          <p className="text-[10px] text-gray-500">{dq.current.createdAt ? new Date(dq.current.createdAt).toLocaleString() : ""}</p>
                         </div>
                       </div>
                     ) : (
@@ -190,6 +191,7 @@ const DisplayBoard = () => {
                         <div>
                           <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{dq.next.name}</p>
                           <p className="text-xs text-gray-400 font-mono">{dq.next.tokenId}</p>
+                          <p className="text-[10px] text-gray-500">{dq.next.createdAt ? new Date(dq.next.createdAt).toLocaleString() : ""}</p>
                         </div>
                       </div>
                     ) : (
@@ -225,6 +227,7 @@ const DisplayBoard = () => {
                     <p className="text-lg font-bold text-gray-900 dark:text-white">#{a.tokenNumber}</p>
                     <p className="text-[10px] text-blue-600 font-mono font-semibold">{a.tokenId}</p>
                     <p className="text-[10px] text-gray-500 truncate max-w-[100px]">{a.name}</p>
+                    <p className="text-[10px] text-gray-400">{a.createdAt ? new Date(a.createdAt).toLocaleString() : ""}</p>
                   </div>
                 ))}
               </div>

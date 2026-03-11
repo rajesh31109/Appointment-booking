@@ -8,7 +8,26 @@ import {
   completeAppointment,
   toggleBooking,
   subscribeHospitalState,
+  addDoctor,
 } from "@/lib/store";
+  // Doctor add form state
+  const [showAddDoctor, setShowAddDoctor] = useState(false);
+  const [newDocName, setNewDocName] = useState("");
+  const [newDocSpecialty, setNewDocSpecialty] = useState("");
+
+  const handleAddDoctor = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newDocName) {
+      toast.error("Doctor name required");
+      return;
+    }
+    addDoctor(hospitalId!, newDocName, newDocSpecialty);
+    setNewDocName("");
+    setNewDocSpecialty("");
+    setShowAddDoctor(false);
+    refresh();
+    toast.success("Doctor added successfully");
+  };
 import { HospitalState, Doctor } from "@/lib/types";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -165,6 +184,27 @@ const ReceptionDashboard = () => {
       </header>
 
       <main className="p-8">
+        {/* Add Doctor Form */}
+        <div className="mb-8">
+          <Button className="bg-emerald-600 hover:bg-emerald-700 shadow-sm mb-2" onClick={() => setShowAddDoctor((v) => !v)}>
+            {showAddDoctor ? "Cancel" : "+ Add Doctor"}
+          </Button>
+          {showAddDoctor && (
+            <form onSubmit={handleAddDoctor} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800 mb-4">
+              <div>
+                <Label className="text-gray-600">Doctor Name</Label>
+                <Input value={newDocName} onChange={(e) => setNewDocName(e.target.value)} placeholder="Dr. Full Name" className="mt-1 border-gray-200" />
+              </div>
+              <div>
+                <Label className="text-gray-600">Specialty</Label>
+                <Input value={newDocSpecialty} onChange={(e) => setNewDocSpecialty(e.target.value)} placeholder="e.g. Cardiology" className="mt-1 border-gray-200" />
+              </div>
+              <div className="md:col-span-2">
+                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 shadow-sm w-full md:w-auto">Add Doctor</Button>
+              </div>
+            </form>
+          )}
+        </div>
         {/* Stat cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="p-5 border-0 shadow-sm bg-gradient-to-br from-blue-600 to-blue-700 text-white">

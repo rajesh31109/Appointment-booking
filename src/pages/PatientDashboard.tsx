@@ -118,6 +118,7 @@ const PatientDashboard = () => {
                 <div className="mb-3 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-center">
                   <p className="text-[10px] text-gray-400 uppercase tracking-widest">Token ID</p>
                   <p className="text-lg font-bold text-blue-600 tracking-wider">{myAppt.tokenId}</p>
+                  <p className="text-[10px] text-gray-500 mt-1">Booked: {new Date(myAppt.createdAt).toLocaleString()}</p>
                 </div>
               )}
               <div className="grid grid-cols-3 gap-3 text-center">
