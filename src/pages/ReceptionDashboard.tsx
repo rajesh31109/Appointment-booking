@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -10,24 +11,6 @@ import {
   subscribeHospitalState,
   addDoctor,
 } from "@/lib/store";
-  // Doctor add form state
-  const [showAddDoctor, setShowAddDoctor] = useState(false);
-  const [newDocName, setNewDocName] = useState("");
-  const [newDocSpecialty, setNewDocSpecialty] = useState("");
-
-  const handleAddDoctor = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newDocName) {
-      toast.error("Doctor name required");
-      return;
-    }
-    addDoctor(hospitalId!, newDocName, newDocSpecialty);
-    setNewDocName("");
-    setNewDocSpecialty("");
-    setShowAddDoctor(false);
-    refresh();
-    toast.success("Doctor added successfully");
-  };
 import { HospitalState, Doctor } from "@/lib/types";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -69,6 +52,7 @@ const ReceptionDashboard = () => {
   const [showForm, setShowForm] = useState(action === "book");
   const [filterDoctor, setFilterDoctor] = useState("all");
 
+
   const [form, setForm] = useState({
     name: "",
     age: "",
@@ -78,6 +62,23 @@ const ReceptionDashboard = () => {
     reason: "",
     doctorId: "",
   });
+
+  // Doctor add form state and handler (now inside component)
+  const [showAddDoctor, setShowAddDoctor] = useState(false);
+  const [newDocName, setNewDocName] = useState("");
+  const [newDocSpecialty, setNewDocSpecialty] = useState("");
+  const handleAddDoctor = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newDocName) {
+      toast.error("Doctor name required");
+      return;
+    }
+    addDoctor(hospitalId!, newDocName, newDocSpecialty);
+    setNewDocName("");
+    setNewDocSpecialty("");
+    setShowAddDoctor(false);
+    toast.success("Doctor added successfully");
+  };
 
   const refresh = useCallback(() => {
     setState(getHospitalState(hospitalId || ""));
