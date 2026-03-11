@@ -37,9 +37,14 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import DashboardSidebar, { DashboardLayout } from "@/components/DashboardSidebar";
+import DashboardSidebar from "@/components/DashboardSidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 const ReceptionDashboard = () => {
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { hospitalId } = useParams<{ hospitalId: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -161,30 +166,50 @@ const ReceptionDashboard = () => {
     { label: "Display Board", icon: Monitor, path: `/display/${hospitalId}` },
   ];
 
-  const sidebar = (
+
+  // Responsive sidebar: Drawer on mobile, fixed on desktop
+  const sidebar = isMobile ? (
+    <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed top-4 left-4 z-50 md:hidden"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="p-0 w-64">
+        <DashboardSidebar brand="MediQueue" items={sidebarItems} onLogout={handleLogout} userName={staffName} userRole="Reception" />
+      </SheetContent>
+    </Sheet>
+  ) : (
     <DashboardSidebar brand="MediQueue" items={sidebarItems} onLogout={handleLogout} userName={staffName} userRole="Reception" />
   );
 
   return (
-    <DashboardLayout sidebar={sidebar}>
-      {/* Top bar */}
-      <header className="sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
-        <div className="flex items-center justify-between px-8 py-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">
+      {/* Sidebar (drawer or fixed) */}
+      {sidebar}
+      {/* Main content */}
+      <div className={isMobile ? "flex-1 ml-0" : "flex-1 ml-64"}>
+        {/* Top bar */}
+        <header className="sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 flex flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:justify-between md:px-8 md:py-4">
           <div>
             <h1 className="text-xl font-bold text-gray-900 dark:text-white">{hospital.name}</h1>
             <p className="text-sm text-gray-500">Reception Dashboard</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
+          <div className="flex items-center gap-3 mt-2 md:mt-0">
+            <div className="relative w-full max-w-xs">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input placeholder="Search patient..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 w-64 h-10 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl" />
+              <Input placeholder="Search patient..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 w-full h-10 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl" />
             </div>
             <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">{staffName.charAt(0).toUpperCase()}</div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main className="p-8">
+        <main className="p-2 md:p-8">
         {/* Add Doctor Form */}
         <div className="mb-8">
           <Button className="bg-emerald-600 hover:bg-emerald-700 shadow-sm mb-2" onClick={() => setShowAddDoctor((v) => !v)}>
@@ -399,8 +424,9 @@ const ReceptionDashboard = () => {
           </Card>
         )}
       </main>
-    </DashboardLayout>
+      {/* End main content */}
+    </div> {/* Close main flex container */}
   );
-};
+}
 
 export default ReceptionDashboard;
